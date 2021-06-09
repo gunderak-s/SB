@@ -34,14 +34,18 @@ public class SeaBattle {
     static int hs,ws;
     static int damage;
     static boolean mymove;
+    static boolean[] dir={false,false,false,false};
+    static int numdir=0;
+    static boolean isship=false;
     // коли поле малюватиметься на консолі, нульовий рядок буде першим, 9-останнім, 0 стовпчик - крайній зліва, 9 стовпчик - крайній справа,
     // тому координата ширини зростатиме зліва направо, а координата висоти зростатиме згори вниз
     public static void main(String[] args) {
 //########################### Основна частина. Тут мають бути виклики методів що і робитимуть основну роботу ##########################################################################
-        setShipHuman(); // виклик метода що малює всі кораблі по введених гравцем координатах
+        //setShipHuman(); // виклик метода що малює всі кораблі по введених гравцем координатах
         //setShipComputer();
         //Game();
         //Druk(); // виклик метода що друкує поле гри людини
+        test();
     }
 //################################ Метод, що малює всі кораблі з можливим накладанням і дотиком #######################################################################################################################
     static void setShipHuman(){    // статичний, нічого не отримує і не повертає
@@ -250,22 +254,12 @@ public class SeaBattle {
             }
             else {
                 computerShot();
-                if (mh[hs][ws]=='~') {
-                    mh[hs][ws] = '*';
-                    Druk(false);
-                    mymove= true;
+                Druk(false);
+                System.out.println("               "+(char)(hs+97)+ws);
+                if (kh<=0) {
+                    System.out.println("GAME OVER. COMPUTER WIN!!!");
+                    return;
                 }
-                else
-                    if (mh[hs][ws]=='O') {
-                        mh[hs][ws] = 'x';
-                        damage++;
-                        checkHumansShipwreck();
-                        Druk(false);
-                        if (kh<=0){
-                            System.out.println("GAME OVER. COMPUTER WIN!!!");
-                            return;
-                        }
-                    }
             }
         }
         while (true);
@@ -281,26 +275,100 @@ public class SeaBattle {
                     if (mh[hs][ws]=='~'){
                         mh[hs][ws]='*';
                         mymove= true;
-                        Druk(false);
                         return;
                     }
                     else
                         if (mh[hs][ws]=='O'){
                             mh[hs][ws]='x';
-                            //if ()
-                            damage++;
-                            Druk(false);
+                            if (hs-1>=0)
+                                if (mh[hs-1][ws]=='~') {
+                                    dir[0] = true;
+                                    numdir++;
+                                }
+                                else if (mh[hs-1][ws]=='O'){
+                                        dir[0]=true;
+                                        numdir++;
+                                        isship=true;
+                                    }
+                            if (hs+1<=9)
+                                if (mh[hs+1][ws]=='~') {
+                                    dir[1] = true;
+                                    numdir++;
+                                }
+                                else if (mh[hs+1][ws]=='O'){
+                                    dir[1]=true;
+                                    numdir++;
+                                    isship=true;
+                                    }
+                            if (ws-1>=0)
+                                if (mh[hs][ws-1]=='~'){
+                                    dir[2]=true;
+                                    numdir++;
+                                }
+                                else if (mh[hs][ws-1]=='O'){
+                                    dir[2]=true;
+                                    numdir++;
+                                    isship=true;
+                                    }
+                            if (ws+1<=9)
+                                if (mh[hs][ws+1]=='~') {
+                                    dir[3] = true;
+                                    numdir++;
+                                }
+                                else if (mh[hs][ws+1]=='O'){
+                                    dir[3]=true;
+                                    numdir++;
+                                    isship=true;
+                                }
+                            if (isship) {
+                                damage++;
+                                hfd=hs;hed=hs;wfd=ws;wed=ws;
+                            }
+                            else {
+                                hf=hs;he=hs;wf=ws;we=ws;
+                                setControlArea(mh);
+                                kh--;
+                                for (int i=0;i<4;i++)
+                                    dir[i]=false;
+                                numdir=0;
+                            }
                             return;
                         }
                 }
                 while (true);
-                //---------------------------------------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------------------------------------
             case 1:
                 break;
     //---------------------------------------------------------------------------------------------------------------------------
             default:
 
         }
+    }
+//############################### Метод що друку поле гри людини #################################################################################################
+    static int choiceOfDirection(){
+        int rez;
+        if (numdir==1) {
+            rez =0;
+            while (!dir[rez])
+                rez++;
+        }
+        else {
+            rez =-1;
+            int rndDir=1;//(int)(Math.random()*numdir);
+            do {
+                rez++;
+                if (dir[rez])
+                    rndDir--;
+            }
+            while (0<=rndDir);
+        }
+        return rez;
+    }
+//############################### Метод що друку поле гри людини #################################################################################################
+    static void test(){
+        dir= new boolean[]{false, false, true, false};
+        numdir=1;
+        int r=choiceOfDirection();   //System.out.println(choiceOfDirection());
     }
 //############################### Метод що друку поле гри людини #################################################################################################
     static void checkHumansShipwreck(){
