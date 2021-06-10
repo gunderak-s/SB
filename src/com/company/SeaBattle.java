@@ -35,8 +35,8 @@ public class SeaBattle {
     static int damage;
     static boolean mymove;
     static boolean[] dir={false,false,false,false};
-    static int numdir=0;
-    static boolean isship=false;
+    //static int numdir=0;
+    static int isship=0;
     // коли поле малюватиметься на консолі, нульовий рядок буде першим, 9-останнім, 0 стовпчик - крайній зліва, 9 стовпчик - крайній справа,
     // тому координата ширини зростатиме зліва направо, а координата висоти зростатиме згори вниз
     public static void main(String[] args) {
@@ -45,7 +45,7 @@ public class SeaBattle {
         //setShipComputer();
         //Game();
         //Druk(); // виклик метода що друкує поле гри людини
-        test();
+        //test();
     }
 //################################ Метод, що малює всі кораблі з можливим накладанням і дотиком #######################################################################################################################
     static void setShipHuman(){    // статичний, нічого не отримує і не повертає
@@ -283,44 +283,36 @@ public class SeaBattle {
                             if (hs-1>=0)
                                 if (mh[hs-1][ws]=='~') {
                                     dir[0] = true;
-                                    numdir++;
                                 }
                                 else if (mh[hs-1][ws]=='O'){
                                         dir[0]=true;
-                                        numdir++;
-                                        isship=true;
+                                        isship++;
                                     }
                             if (hs+1<=9)
                                 if (mh[hs+1][ws]=='~') {
                                     dir[1] = true;
-                                    numdir++;
                                 }
                                 else if (mh[hs+1][ws]=='O'){
                                     dir[1]=true;
-                                    numdir++;
-                                    isship=true;
+                                    isship++;
                                     }
                             if (ws-1>=0)
                                 if (mh[hs][ws-1]=='~'){
                                     dir[2]=true;
-                                    numdir++;
                                 }
                                 else if (mh[hs][ws-1]=='O'){
                                     dir[2]=true;
-                                    numdir++;
-                                    isship=true;
+                                    isship++;
                                     }
                             if (ws+1<=9)
                                 if (mh[hs][ws+1]=='~') {
                                     dir[3] = true;
-                                    numdir++;
                                 }
                                 else if (mh[hs][ws+1]=='O'){
                                     dir[3]=true;
-                                    numdir++;
-                                    isship=true;
+                                    isship++;
                                 }
-                            if (isship) {
+                            if (isship>0) {
                                 damage++;
                                 hfd=hs;hed=hs;wfd=ws;wed=ws;
                             }
@@ -330,7 +322,6 @@ public class SeaBattle {
                                 kh--;
                                 for (int i=0;i<4;i++)
                                     dir[i]=false;
-                                numdir=0;
                             }
                             return;
                         }
@@ -338,15 +329,326 @@ public class SeaBattle {
                 while (true);
     //---------------------------------------------------------------------------------------------------------------------------
             case 1:
+                switch (choiceOfDirection()){
+                    case 0:
+                        hs=hfd-1;
+                        ws=wfd;
+                        if (mh[hs][ws]=='~'){
+                            mh[hs][ws]='*';
+                            mymove=true;
+                            dir[0]=false;
+                        }
+                        else{
+                            mh[hs][ws]='x';
+                            hfd=hs;
+                            if(hs-1>=0) {
+                                if (mh[hs-1][ws]!='O'){
+                                    isship--;
+                                    if (mh[hs-1][ws]!='~')
+                                        dir[0]=false;
+                                }
+                            }
+                            else{
+                                isship--;
+                                dir[0]=false;
+                            }
+                            if (isship>0) {
+                                damage++;
+                                dir[2]=false;dir[3]=false;
+                                return;
+                            }
+                            else {
+                                hf=hfd;he=hed;wf=wfd;we=wed;
+                                setControlArea(mh);
+                                kh--;
+                                damage=0;
+                                for (int i=0;i<4;i++)
+                                    dir[i]=false;
+                                return;
+                            }
+                        }
+                        //break;
+                    case 1:
+                        hs=hed+1;
+                        ws=wed;
+                        if (mh[hs][ws]=='~'){
+                            mh[hs][ws]='*';
+                            mymove=true;
+                            dir[1]=false;
+                        }
+                        else{
+                            mh[hs][ws]='x';
+                            hed=hs;
+                            if(hs+1<=9) {
+                                if (mh[hs+1][ws]!='O'){
+                                    isship--;
+                                    if (mh[hs+1][ws]!='~')
+                                        dir[1]=false;
+                                }
+                            }
+                            else{
+                                isship--;
+                                dir[1]=false;
+                            }
+                            if (isship>0) {
+                                damage++;
+                                dir[2]=false;dir[3]=false;
+                                return;
+                            }
+                            else {
+                                hf=hfd;he=hed;wf=wfd;we=wed;
+                                setControlArea(mh);
+                                kh--;
+                                damage=0;
+                                for (int i=0;i<4;i++)
+                                    dir[i]=false;
+                                return;
+                            }
+                        }
+                        //break;
+                    case 2:
+                        hs=hfd;
+                        ws=wfd-1;
+                        if (mh[hs][ws]=='~'){
+                            mh[hs][ws]='*';
+                            mymove=true;
+                            dir[2]=false;
+                        }
+                        else{
+                            mh[hs][ws]='x';
+                            wfd=ws;
+                            if(ws-1>=0) {
+                                if (mh[hs][ws-1]!='O'){
+                                    isship--;
+                                    if (mh[hs][ws-1]!='~')
+                                        dir[2]=false;
+                                }
+                            }
+                            else{
+                                isship--;
+                                dir[2]=false;
+                            }
+                            if (isship>0) {
+                                damage++;
+                                dir[0]=false;dir[1]=false;
+                                return;
+                            }
+                            else {
+                                hf=hfd;he=hed;wf=wfd;we=wed;
+                                setControlArea(mh);
+                                kh--;
+                                damage=0;
+                                for (int i=0;i<4;i++)
+                                    dir[i]=false;
+                                return;
+                            }
+                        }
+                        //break;
+                    case 3:
+                        hs=hfd;
+                        ws=wed+1;
+                        if (mh[hs][ws]=='~'){
+                            mh[hs][ws]='*';
+                            mymove=true;
+                            dir[3]=false;
+                        }
+                        else{
+                            mh[hs][ws]='x';
+                            wed=ws;
+                            if(ws+1<=9) {
+                                if (mh[hs][ws+1]!='O'){
+                                    isship--;
+                                    if (mh[hs][ws+1]!='~')
+                                        dir[3]=false;
+                                }
+                            }
+                            else{
+                                isship--;
+                                dir[3]=false;
+                            }
+                            if (isship>0) {
+                                damage++;
+                                dir[0]=false;dir[1]=false;
+                                return;
+                            }
+                            else {
+                                hf=hfd;he=hed;wf=wfd;we=wed;
+                                setControlArea(mh);
+                                kh--;
+                                damage=0;
+                                for (int i=0;i<4;i++)
+                                    dir[i]=false;
+                                return;
+                            }
+                        }
+                        //break;
+                }
                 break;
     //---------------------------------------------------------------------------------------------------------------------------
             default:
-
+                switch (choiceOfDirection()){
+                    case 0:
+                        hs=hfd-1;
+                        ws=wfd;
+                        if (mh[hs][ws]=='~'){
+                            mh[hs][ws]='*';
+                            mymove=true;
+                            dir[0]=false;
+                        }
+                        else{
+                            mh[hs][ws]='x';
+                            hfd=hs;
+                            if(hs-1>=0) {
+                                if (mh[hs-1][ws]!='O'){
+                                    isship--;
+                                    if (mh[hs-1][ws]!='~')
+                                        dir[0]=false;
+                                }
+                            }
+                            else{
+                                isship--;
+                                dir[0]=false;
+                            }
+                            if (isship>0) {
+                                damage++;
+                                //dir[2]=false;dir[3]=false;
+                                return;
+                            }
+                            else {
+                                hf=hfd;he=hed;wf=wfd;we=wed;
+                                setControlArea(mh);
+                                kh--;
+                                damage=0;
+                                for (int i=0;i<4;i++)
+                                    dir[i]=false;
+                                return;
+                            }
+                        }
+                        //break;
+                    case 1:
+                        hs=hed+1;
+                        ws=wed;
+                        if (mh[hs][ws]=='~'){
+                            mh[hs][ws]='*';
+                            mymove=true;
+                            dir[1]=false;
+                        }
+                        else{
+                            mh[hs][ws]='x';
+                            hed=hs;
+                            if(hs+1<=9) {
+                                if (mh[hs+1][ws]!='O'){
+                                    isship--;
+                                    if (mh[hs+1][ws]!='~')
+                                        dir[1]=false;
+                                }
+                            }
+                            else{
+                                isship--;
+                                dir[1]=false;
+                            }
+                            if (isship>0) {
+                                damage++;
+                                //dir[2]=false;dir[3]=false;
+                                return;
+                            }
+                            else {
+                                hf=hfd;he=hed;wf=wfd;we=wed;
+                                setControlArea(mh);
+                                kh--;
+                                damage=0;
+                                for (int i=0;i<4;i++)
+                                    dir[i]=false;
+                                return;
+                            }
+                        }
+                        //break;
+                    case 2:
+                        hs=hfd;
+                        ws=wfd-1;
+                        if (mh[hs][ws]=='~'){
+                            mh[hs][ws]='*';
+                            mymove=true;
+                            dir[2]=false;
+                        }
+                        else{
+                            mh[hs][ws]='x';
+                            wfd=ws;
+                            if(ws-1>=0) {
+                                if (mh[hs][ws-1]!='O'){
+                                    isship--;
+                                    if (mh[hs][ws-1]!='~')
+                                        dir[2]=false;
+                                }
+                            }
+                            else{
+                                isship--;
+                                dir[2]=false;
+                            }
+                            if (isship>0) {
+                                damage++;
+                                //dir[0]=false;dir[1]=false;
+                                return;
+                            }
+                            else {
+                                hf=hfd;he=hed;wf=wfd;we=wed;
+                                setControlArea(mh);
+                                kh--;
+                                damage=0;
+                                for (int i=0;i<4;i++)
+                                    dir[i]=false;
+                                return;
+                            }
+                        }
+                        //break;
+                    case 3:
+                        hs=hfd;
+                        ws=wed+1;
+                        if (mh[hs][ws]=='~'){
+                            mh[hs][ws]='*';
+                            mymove=true;
+                            dir[3]=false;
+                        }
+                        else{
+                            mh[hs][ws]='x';
+                            wed=ws;
+                            if(ws+1<=9) {
+                                if (mh[hs][ws+1]!='O'){
+                                    isship--;
+                                    if (mh[hs][ws+1]!='~')
+                                        dir[3]=false;
+                                }
+                            }
+                            else{
+                                isship--;
+                                dir[3]=false;
+                            }
+                            if (isship>0) {
+                                damage++;
+                                //dir[0]=false;dir[1]=false;
+                                return;
+                            }
+                            else {
+                                hf=hfd;he=hed;wf=wfd;we=wed;
+                                setControlArea(mh);
+                                kh--;
+                                damage=0;
+                                for (int i=0;i<4;i++)
+                                    dir[i]=false;
+                                return;
+                            }
+                        }
+                        //break;
+                }
         }
     }
 //############################### Метод що друку поле гри людини #################################################################################################
     static int choiceOfDirection(){
         int rez;
+        int numdir=0;
+        for (int i=0;i<4;i++)
+            if (dir[i])
+                numdir++;
         if (numdir==1) {
             rez =0;
             while (!dir[rez])
@@ -354,7 +656,7 @@ public class SeaBattle {
         }
         else {
             rez =-1;
-            int rndDir=1;//(int)(Math.random()*numdir);
+            int rndDir=(int)(Math.random()*numdir);
             do {
                 rez++;
                 if (dir[rez])
@@ -367,7 +669,6 @@ public class SeaBattle {
 //############################### Метод що друку поле гри людини #################################################################################################
     static void test(){
         dir= new boolean[]{false, false, true, false};
-        numdir=1;
         int r=choiceOfDirection();   //System.out.println(choiceOfDirection());
     }
 //############################### Метод що друку поле гри людини #################################################################################################
