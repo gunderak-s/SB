@@ -42,8 +42,9 @@ public class SeaBattle {
     public static void main(String[] args) {
 //########################### Основна частина. Тут мають бути виклики методів що і робитимуть основну роботу ##########################################################################
         //setShipHuman(); // виклик метода що малює всі кораблі по введених гравцем координатах
-        //setShipComputer();
-        //Game();
+        setShipComputer(mh);
+        setShipComputer(mb);
+        Game();
         //Druk(); // виклик метода що друкує поле гри людини
         //test();
     }
@@ -164,11 +165,12 @@ public class SeaBattle {
         removeControlArea(mh);
     }
 //############################### Метод що друку поле гри компа #################################################################################################
-    static  void setShipComputer(){
+    static  void setShipComputer(char[][]m){
+        int k=0;
         int e=0;
         int [] mk={0,0,0,0};   // к-сть вже намальованих кораблів конкретних розмірів, mk[0] - к-сть одинарних, mk[1] - к-сть двійних і т д
         int d;    // змінна для довжини корабля
-        while (kb <10){   // виконувати цикл поки кораблів менше десяти
+        while (k <10){   // виконувати цикл поки кораблів менше десяти
             hf=(int)(Math.random()*10);
             wf=(int)(Math.random()*10);
             he=(int)(Math.random()*10);
@@ -184,13 +186,13 @@ public class SeaBattle {
                     {System.out.println("Розмір корабля завеликий. ");e++;continue;}   // обриваємо цей виток циклу
                 if (mk[d]>=4-d) // якщо к-сть кораблів такого розміру вже набрана, то
                     {System.out.println("Кількість Кораблів такого розміру вже введена. ");e++;continue;}   // обриваємо цей виток циклу
-                if ((mb[hf][wf]=='!')|(mb[he][we]=='!')|(mb[hf][wf]=='O')|(mb[he][we]=='O'))    // якщо координата початку чи кінця попала в зону контролю, то
+                if ((m[hf][wf]=='!')|(m[he][we]=='!')|(m[hf][wf]=='O')|(m[he][we]=='O'))    // якщо координата початку чи кінця попала в зону контролю, то
                     {System.out.println("Координати кораблів перетинаються. ");e++;continue; }  // обриваємо цей виток циклу
                 for (int i = hf; i <= he; i++)   // починаючи з першої клітинки по висоті до останньої по висоті
-                    mb[i][wf] = 'O';  // записуємо у поточний елемент в рядку [i] стовпці [wf](весь корабель в одному стовпці) значок корабля - '#'
-                kb++; // к-сть кораблів збільшуємо на 1
+                    m[i][wf] = 'O';  // записуємо у поточний елемент в рядку [i] стовпці [wf](весь корабель в одному стовпці) значок корабля - '#'
+                k++; // к-сть кораблів збільшуємо на 1
                 mk[d]++;  // к-сть кораблів цього розміру збільшуємо на 1
-                setControlArea(mb);
+                setControlArea(m);
             }
             else // інакше(координати ширини його початку і кінця НЕ однакові(початок і кінець НЕ в одному стовпчику)), то
                 if (hf==he){   // якщо координати висоти його початку і кінця однакові(початок і кінець в одному рядку)
@@ -204,19 +206,23 @@ public class SeaBattle {
                         {System.out.println("Розмір корабля завеликий. ");e++;continue;}   // обриваємо цей виток циклу
                     if (mk[d]>=4-d) // якщо к-сть кораблів такого розміру вже набрана, то
                         {System.out.println("Кількість Кораблів такого розміру вже введена. ");e++;continue;}   // обриваємо цей виток циклу
-                    if ((mb[hf][wf]=='!')|(mb[he][we]=='!')|(mb[hf][wf]=='O')|(mb[he][we]=='O'))    // якщо координата початку чи кінця попала в зону контролю, то
+                    if ((m[hf][wf]=='!')|(m[he][we]=='!')|(m[hf][wf]=='O')|(m[he][we]=='O'))    // якщо координата початку чи кінця попала в зону контролю, то
                         {System.out.println("Координати кораблів перетинаються. ");e++;continue; }  // обриваємо цей виток циклу
                     for (int i = wf; i <= we; i++)   // починаючи з першої клітинки по ширині до останньої по ширині
-                        mb[hf][i] = 'O';  // записуємо у поточний елемент в рядку [hf] стовпці [i](весь корабель в одному рядку) значок корабля - '#'
-                    kb++; // к-сть кораблів збільшуємо на 1
+                        m[hf][i] = 'O';  // записуємо у поточний елемент в рядку [hf] стовпці [i](весь корабель в одному рядку) значок корабля - '#'
+                    k++; // к-сть кораблів збільшуємо на 1
                     mk[d]++;    // к-сть кораблів цього розміру збільшуємо на 1
-                    setControlArea(mb);
+                    setControlArea(m);
                 }
                 else {
                     System.out.println("Початок і кінець не на одній лінії. ");e++;
                 }
         }
-        removeControlArea(mb);
+        if (m==mh)
+            kh=k;
+        else
+            kb=k;
+        removeControlArea(m);
         Druk();
         System.out.println("К-сть спроб = "+e+" + 10");
     }
@@ -229,27 +235,27 @@ public class SeaBattle {
         Druk();
         do{
             if (mymove){
-                System.out.print("Введіть координати пострілу:             ");
-                s=sc.next();
-                if (s.length()>1){
-                    hs=s.codePointAt(0)-97;
-                    ws=s.codePointAt(1)-48;
-                    if ((hs>=0)&(hs<=9)&(ws>=0)&(ws<=9))    // якщо хоч одна координата буде за межами поля гри
-                        if (mb[hs][ws]=='~') {
-                            mb[hs][ws] = '*';
-                            Druk(true);
-                            mymove= false;
-                        }
-                        else
-                            if (mb[hs][ws]=='O') {
+                System.out.print("                  Введіть координати пострілу:");
+                if (sc.hasNext()) {
+                    s = sc.next();
+                    if (s.length() > 1) {
+                        hs = s.codePointAt(0) - 97;
+                        ws = s.codePointAt(1) - 48;
+                        if ((hs >= 0) & (hs <= 9) & (ws >= 0) & (ws <= 9))    // якщо хоч одна координата буде за межами поля гри
+                            if (mb[hs][ws] == '~') {
+                                mb[hs][ws] = '*';
+                                Druk(true);
+                                mymove = false;
+                            } else if (mb[hs][ws] == 'O') {
                                 mb[hs][ws] = 'x';
                                 checkComputersShipwreck();
                                 Druk(true);
-                                if (kb<=0){
+                                if (kb <= 0) {
                                     System.out.println("GAME OVER. HUMAN WIN!!!");
                                     return;
                                 }
                             }
+                    }
                 }
             }
             else {
@@ -672,65 +678,6 @@ public class SeaBattle {
         int r=choiceOfDirection();   //System.out.println(choiceOfDirection());
     }
 //############################### Метод що друку поле гри людини #################################################################################################
-    static void checkHumansShipwreck(){
-        int j=ws;
-        int i=hs-1;
-        while (i>=0)
-            if (mh[i][j]=='O') {
-                hfd=i+1;
-                return;
-            }
-            else
-            if (mh[i][j]=='x')
-                i--;
-            else
-                break;
-        hfd=i+1;
-        i=hs+1;
-        while (i<=9)
-            if (mh[i][j]=='O') {
-                hed=i-1;
-                return;
-            }
-            else
-            if (mh[i][j]=='x')
-                i++;
-            else
-                break;
-        hed=i-1;
-        if ((hfd==hs)&(hed==hs)){
-            i=hs;
-            j=ws-1;
-            while (j>=0)
-                if (mh[i][j]=='O'){
-                    wfd=j+1;
-                    return;
-                }
-                else
-                if (mh[i][j]=='x')
-                    j--;
-                else
-                    break;
-            wfd=j+1;
-            j=ws+1;
-            while (j<=9)
-                if (mh[i][j]=='O'){
-                    wed=j-1;
-                    return;
-                }
-                else
-                if (mh[i][j]=='x')
-                    j++;
-                else
-                    break;
-            wed=j-1;
-        }
-        kh--;
-        damage=0;
-        hf=hfd;wf=wfd;he=hed;we=wed;
-        setControlArea(mh);
-    }
-//############################### Метод що друку поле гри людини #################################################################################################
     static void checkComputersShipwreck(){
         int j=ws;
         int i=hs-1;
@@ -780,10 +727,10 @@ public class SeaBattle {
     setControlArea(mb);
     }
 //############################### Метод що друку поле гри людини #################################################################################################
-    static void Druk(boolean mymove){
+    static void Druk(boolean mm){
         System.out.println("             H U M A N                         C O M P U T E R");
         System.out.println("    0  1  2  3  4  5  6  7  8  9         0  1  2  3  4  5  6  7  8  9");
-        if (mymove)
+        if (mm)
             for (int i=0;i<10;i++) {    // проходимо по всіх рядках поля гри
                 System.out.print(" "+(char)(i+97)+" ");
                 if (i==hs) {
