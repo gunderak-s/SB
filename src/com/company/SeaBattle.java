@@ -363,7 +363,6 @@ public class SeaBattle {
                             if (isship>0) {
                                 damage++;
                                 dir[2]=false;dir[3]=false;
-                                return;
                             }
                             else {
                                 hf=hfd;he=hed;wf=wfd;we=wed;
@@ -372,10 +371,9 @@ public class SeaBattle {
                                 damage=0;
                                 for (int i=0;i<4;i++)
                                     dir[i]=false;
-                                return;
                             }
                         }
-                        //break;
+                        return;
                     case 1:
                         hs=hed+1;
                         ws=wed;
@@ -401,7 +399,6 @@ public class SeaBattle {
                             if (isship>0) {
                                 damage++;
                                 dir[2]=false;dir[3]=false;
-                                return;
                             }
                             else {
                                 hf=hfd;he=hed;wf=wfd;we=wed;
@@ -410,10 +407,9 @@ public class SeaBattle {
                                 damage=0;
                                 for (int i=0;i<4;i++)
                                     dir[i]=false;
-                                return;
                             }
                         }
-                        //break;
+                        return;
                     case 2:
                         hs=hfd;
                         ws=wfd-1;
@@ -439,7 +435,6 @@ public class SeaBattle {
                             if (isship>0) {
                                 damage++;
                                 dir[0]=false;dir[1]=false;
-                                return;
                             }
                             else {
                                 hf=hfd;he=hed;wf=wfd;we=wed;
@@ -448,10 +443,9 @@ public class SeaBattle {
                                 damage=0;
                                 for (int i=0;i<4;i++)
                                     dir[i]=false;
-                                return;
                             }
                         }
-                        //break;
+                        return;
                     case 3:
                         hs=hfd;
                         ws=wed+1;
@@ -477,7 +471,6 @@ public class SeaBattle {
                             if (isship>0) {
                                 damage++;
                                 dir[0]=false;dir[1]=false;
-                                return;
                             }
                             else {
                                 hf=hfd;he=hed;wf=wfd;we=wed;
@@ -486,10 +479,9 @@ public class SeaBattle {
                                 damage=0;
                                 for (int i=0;i<4;i++)
                                     dir[i]=false;
-                                return;
                             }
                         }
-                        //break;
+                        return;
                 }
                 break;
     //---------------------------------------------------------------------------------------------------------------------------
@@ -520,7 +512,6 @@ public class SeaBattle {
                             if (isship>0) {
                                 damage++;
                                 //dir[2]=false;dir[3]=false;
-                                return;
                             }
                             else {
                                 hf=hfd;he=hed;wf=wfd;we=wed;
@@ -529,10 +520,9 @@ public class SeaBattle {
                                 damage=0;
                                 for (int i=0;i<4;i++)
                                     dir[i]=false;
-                                return;
                             }
                         }
-                        //break;
+                        return;
                     case 1:
                         hs=hed+1;
                         ws=wed;
@@ -558,7 +548,6 @@ public class SeaBattle {
                             if (isship>0) {
                                 damage++;
                                 //dir[2]=false;dir[3]=false;
-                                return;
                             }
                             else {
                                 hf=hfd;he=hed;wf=wfd;we=wed;
@@ -567,10 +556,9 @@ public class SeaBattle {
                                 damage=0;
                                 for (int i=0;i<4;i++)
                                     dir[i]=false;
-                                return;
                             }
                         }
-                        //break;
+                        return;
                     case 2:
                         hs=hfd;
                         ws=wfd-1;
@@ -596,7 +584,6 @@ public class SeaBattle {
                             if (isship>0) {
                                 damage++;
                                 //dir[0]=false;dir[1]=false;
-                                return;
                             }
                             else {
                                 hf=hfd;he=hed;wf=wfd;we=wed;
@@ -605,10 +592,9 @@ public class SeaBattle {
                                 damage=0;
                                 for (int i=0;i<4;i++)
                                     dir[i]=false;
-                                return;
                             }
                         }
-                        //break;
+                        return;
                     case 3:
                         hs=hfd;
                         ws=wed+1;
@@ -634,7 +620,6 @@ public class SeaBattle {
                             if (isship>0) {
                                 damage++;
                                 //dir[0]=false;dir[1]=false;
-                                return;
                             }
                             else {
                                 hf=hfd;he=hed;wf=wfd;we=wed;
@@ -643,10 +628,9 @@ public class SeaBattle {
                                 damage=0;
                                 for (int i=0;i<4;i++)
                                     dir[i]=false;
-                                return;
                             }
                         }
-                        //break;
+                        return;
                 }
         }
     }
@@ -676,8 +660,13 @@ public class SeaBattle {
     }
 //############################### Метод що друку поле гри людини #################################################################################################
     static void test(){
-        dir= new boolean[]{false, false, true, false};
-        int r=choiceOfDirection();   //System.out.println(choiceOfDirection());
+        dir= new boolean[]{true, false, true, true};
+        for (int i=1;i<1001;i++)
+            if (i%100==0)
+                System.out.println(choiceOfDirection()+" ");
+            else
+                System.out.print(choiceOfDirection()+" ");
+        //int r=choiceOfDirection();   //System.out.println(choiceOfDirection());
     }
 //############################### Метод що друку поле гри людини #################################################################################################
     static void checkComputersShipwreck(){
@@ -739,6 +728,7 @@ public class SeaBattle {
         if (mm)
             for (int i=0;i<10;i++) {    // проходимо по всіх рядках поля гри
                 System.out.print(" "+(char)(i+97)+" ");
+                // після друкування всіх елементів поточного рядка переводими друк на новий рядок
                 if (i==hs) {
                     for (int j = 0; j < 10; j++)    // проходимо по всіх елементах поточного рядка
                         System.out.print(" " + mh[i][j] + " ");    // друкуємо поточний елемент з пропуском до нього і після
@@ -751,7 +741,6 @@ public class SeaBattle {
                             System.out.print(">"+mb[i][j]+"<");    // друкуємо поточний елемент з пропуском до нього і після
                         else
                             System.out.print(" "+mb[i][j]+" ");    // друкуємо поточний елемент з пропуском до нього і після
-                    System.out.println();   // після друкування всіх елементів поточного рядка переводими друк на новий рядок
                 }
                 else {
                     for (int j = 0; j < 10; j++)    // проходимо по всіх елементах поточного рядка
@@ -762,12 +751,13 @@ public class SeaBattle {
                           //  System.out.print(" ~ ");
                         //else
                             System.out.print(" " + mb[i][j] + " ");    // друкуємо поточний елемент з пропуском до нього і після
-                    System.out.println();   // після друкування всіх елементів поточного рядка переводими друк на новий рядок
                 }
+                System.out.println();   // після друкування всіх елементів поточного рядка переводими друк на новий рядок
             }
         else
             for (int i=0;i<10;i++) {    // проходимо по всіх рядках поля гри
                 System.out.print(" "+(char)(i+97)+" ");
+                // після друкування всіх елементів поточного рядка переводими друк на новий рядок
                 if (i==hs) {
                     for (int j = 0; j < 10; j++)    // проходимо по всіх елементах поточного рядка
                         if (j == ws)
@@ -780,7 +770,6 @@ public class SeaBattle {
                         //    System.out.print(" ~ ");
                         //else
                             System.out.print(" "+mb[i][j]+" ");    // друкуємо поточний елемент з пропуском до нього і після
-                    System.out.println();   // після друкування всіх елементів поточного рядка переводими друк на новий рядок
                 }
                 else {
                     for (int j = 0; j < 10; j++)    // проходимо по всіх елементах поточного рядка
@@ -791,8 +780,8 @@ public class SeaBattle {
                         //    System.out.print(" ~ ");
                         //else
                             System.out.print(" " + mb[i][j] + " ");    // друкуємо поточний елемент з пропуском до нього і після
-                    System.out.println();   // після друкування всіх елементів поточного рядка переводими друк на новий рядок
                 }
+                System.out.println();   // після друкування всіх елементів поточного рядка переводими друк на новий рядок
             }
     }
 //############################### Метод що друку поле гри людини #################################################################################################
