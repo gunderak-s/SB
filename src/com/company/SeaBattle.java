@@ -4,30 +4,8 @@ import java.util.Scanner;
 
 public class SeaBattle {
     // оголошення полів гри для людини(m-масив, l-людина) та комп'ютера(m-масив, c-computer) - двовимірних масивів символів розміру 10 на 10, оголошення як значень класу щоб методи мали до них доступ
-    static char [][] mh={   // явне введення елементів масиву для ручного введення коли буде тестуватися
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',}
-    };
-    static char [][] mb={
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',},
-            {'~','~','~','~','~','~','~','~','~','~',}
-    };
+    static char [][] mh;
+    static char [][] mb;
     static int wf=-1,hf=-1,we=-1,he=-1;    // змінні, куди записуватимуться координати(w-width(ширина), f-first(початок), h-height(висота), e-end(кінець))
     static int wfd=-1,hfd=-1,wed=-1,hed=-1;
     static int kh=0,kb=0;
@@ -35,18 +13,33 @@ public class SeaBattle {
     static int damage;
     static boolean mymove;
     static boolean[] dir={false,false,false,false};
-    //static int numdir=0;
     static int isship=0;
+    static char w='.';
+    static char s='O';
+    static char c='*';
+    static char m='*';
+    static char h='x';
     // коли поле малюватиметься на консолі, нульовий рядок буде першим, 9-останнім, 0 стовпчик - крайній зліва, 9 стовпчик - крайній справа,
     // тому координата ширини зростатиме зліва направо, а координата висоти зростатиме згори вниз
     public static void main(String[] args) {
 //########################### Основна частина. Тут мають бути виклики методів що і робитимуть основну роботу ##########################################################################
+        setSee();
         //setShipHuman(); // виклик метода що малює всі кораблі по введених гравцем координатах
         setShipComputer(mh);
         setShipComputer(mb);
         Game();
         //Druk(); // виклик метода що друкує поле гри людини
         //test();
+    }
+//################################ Метод, що малює всі кораблі з можливим накладанням і дотиком #######################################################################################################################
+    static void setSee(){
+        mh=new char[10][10];
+        mb=new char[10][10];
+        for (int i=0;i<10;i++)
+            for (int j=0;j<10;j++){
+                mh[i][j]=w;
+                mb[i][j]=w;
+            }
     }
 //################################ Метод, що малює всі кораблі з можливим накладанням і дотиком #######################################################################################################################
     static void setShipHuman(){    // статичний, нічого не отримує і не повертає
@@ -93,12 +86,12 @@ public class SeaBattle {
                                 System.out.println("Кількість Кораблів такого розміру вже введена. ");
                                 continue;
                             }   // обриваємо цей виток циклу
-                            if ((mh[hf][wf]=='!')|(mh[he][we]=='!')|(mh[hf][wf]=='O')|(mh[he][we]=='O')){    // якщо координата початку чи кінця попала в зону контролю, то
+                            if ((mh[hf][wf]==c)|(mh[he][we]==c)|(mh[hf][wf]==s)|(mh[he][we]==s)){    // якщо координата початку чи кінця попала в зону контролю, то
                                 System.out.println("Координати кораблів перетинаються. ");
                                 continue;
                             }  // обриваємо цей виток циклу
                             for (int i = hf; i <= he; i++)   // починаючи з першої клітинки по висоті до останньої по висоті
-                                mh[i][wf] = 'O';  // записуємо у поточний елемент в рядку [i] стовпці [wf](весь корабель в одному стовпці) значок корабля - '#'
+                                mh[i][wf] = s;  // записуємо у поточний елемент в рядку [i] стовпці [wf](весь корабель в одному стовпці) значок корабля - '#'
                             kh++; // к-сть кораблів збільшуємо на 1
                             mk[d]++;  // к-сть кораблів цього розміру збільшуємо на 1
                             setControlArea(mh);
@@ -119,12 +112,12 @@ public class SeaBattle {
                                     System.out.println("Кількість Кораблів такого розміру вже введена. ");
                                     continue;
                                 }   // обриваємо цей виток циклу
-                                if ((mh[hf][wf]=='!')|(mh[he][we]=='!')|(mh[hf][wf]=='O')|(mh[he][we]=='O')){   // якщо координата початку чи кінця попала в зону контролю, то
+                                if ((mh[hf][wf]==c)|(mh[he][we]==c)|(mh[hf][wf]==s)|(mh[he][we]==s)){   // якщо координата початку чи кінця попала в зону контролю, то
                                     System.out.println("Координати кораблів перетинаються. ");
                                     continue;
                                 }  // обриваємо цей виток циклу
                                 for (int i = wf; i <= we; i++)   // починаючи з першої клітинки по ширині до останньої по ширині
-                                    mh[hf][i] = 'O';  // записуємо у поточний елемент в рядку [hf] стовпці [i](весь корабель в одному рядку) значок корабля - '#'
+                                    mh[hf][i] = s;  // записуємо у поточний елемент в рядку [hf] стовпці [i](весь корабель в одному рядку) значок корабля - '#'
                                 kh++; // к-сть кораблів збільшуємо на 1
                                 mk[d]++;    // к-сть кораблів цього розміру збільшуємо на 1
                                 setControlArea(mh);
@@ -144,11 +137,11 @@ public class SeaBattle {
                             System.out.println("Кількість Кораблів такого розміру вже введена. ");
                             continue;
                         }   // обриваємо цей виток циклу
-                        if ((mh[hf][wf]=='!')|(mh[hf][wf]=='O')){    // якщо координата початку чи кінця попала в зону контролю, то
+                        if ((mh[hf][wf]==c)|(mh[hf][wf]==s)){    // якщо координата початку чи кінця попала в зону контролю, то
                             System.out.println("Координати кораблів перетинаються. ");
                             continue;
                         }  // обриваємо цей виток циклу
-                        mh[hf][wf] = 'O';  // записуємо у поточний елемент в рядку [i] стовпці [wf](весь корабель в одному стовпці) значок корабля - '#'
+                        mh[hf][wf] = s;  // записуємо у поточний елемент в рядку [i] стовпці [wf](весь корабель в одному стовпці) значок корабля - '#'
                         kh++; // к-сть кораблів збільшуємо на 1
                         mk[0]++;  // к-сть кораблів цього розміру збільшуємо на 1
                         he=hf;
@@ -186,10 +179,10 @@ public class SeaBattle {
                     {System.out.println("Розмір корабля завеликий. ");e++;continue;}   // обриваємо цей виток циклу
                 if (mk[d]>=4-d) // якщо к-сть кораблів такого розміру вже набрана, то
                     {System.out.println("Кількість Кораблів такого розміру вже введена. ");e++;continue;}   // обриваємо цей виток циклу
-                if ((m[hf][wf]=='!')|(m[he][we]=='!')|(m[hf][wf]=='O')|(m[he][we]=='O'))    // якщо координата початку чи кінця попала в зону контролю, то
+                if ((m[hf][wf]==c)|(m[he][we]==c)|(m[hf][wf]==s)|(m[he][we]==s))    // якщо координата початку чи кінця попала в зону контролю, то
                     {System.out.println("Координати кораблів перетинаються. ");e++;continue; }  // обриваємо цей виток циклу
                 for (int i = hf; i <= he; i++)   // починаючи з першої клітинки по висоті до останньої по висоті
-                    m[i][wf] = 'O';  // записуємо у поточний елемент в рядку [i] стовпці [wf](весь корабель в одному стовпці) значок корабля - '#'
+                    m[i][wf] = s;  // записуємо у поточний елемент в рядку [i] стовпці [wf](весь корабель в одному стовпці) значок корабля - '#'
                 k++; // к-сть кораблів збільшуємо на 1
                 mk[d]++;  // к-сть кораблів цього розміру збільшуємо на 1
                 setControlArea(m);
@@ -206,10 +199,10 @@ public class SeaBattle {
                         {System.out.println("Розмір корабля завеликий. ");e++;continue;}   // обриваємо цей виток циклу
                     if (mk[d]>=4-d) // якщо к-сть кораблів такого розміру вже набрана, то
                         {System.out.println("Кількість Кораблів такого розміру вже введена. ");e++;continue;}   // обриваємо цей виток циклу
-                    if ((m[hf][wf]=='!')|(m[he][we]=='!')|(m[hf][wf]=='O')|(m[he][we]=='O'))    // якщо координата початку чи кінця попала в зону контролю, то
+                    if ((m[hf][wf]==c)|(m[he][we]==c)|(m[hf][wf]==s)|(m[he][we]==s))    // якщо координата початку чи кінця попала в зону контролю, то
                         {System.out.println("Координати кораблів перетинаються. ");e++;continue; }  // обриваємо цей виток циклу
                     for (int i = wf; i <= we; i++)   // починаючи з першої клітинки по ширині до останньої по ширині
-                        m[hf][i] = 'O';  // записуємо у поточний елемент в рядку [hf] стовпці [i](весь корабель в одному рядку) значок корабля - '#'
+                        m[hf][i] = s;  // записуємо у поточний елемент в рядку [hf] стовпці [i](весь корабель в одному рядку) значок корабля - '#'
                     k++; // к-сть кораблів збільшуємо на 1
                     mk[d]++;    // к-сть кораблів цього розміру збільшуємо на 1
                     setControlArea(m);
@@ -230,28 +223,28 @@ public class SeaBattle {
     static void Game(){
         mymove=true;
         Scanner sc=new Scanner(System.in);
-        String s;
+        String coord;
         damage=0;
         Druk();
         do{
             if (mymove){
                 System.out.print("                  Введіть координати пострілу:");
                 if (sc.hasNext()) {
-                    s = sc.next();
-                    if (s.length() > 1) {
-                        hs = s.codePointAt(0) - 97;
-                        ws = s.codePointAt(1) - 48;
+                    coord = sc.next();
+                    if (coord.length() > 1) {
+                        hs = coord.codePointAt(0) - 97;
+                        ws = coord.codePointAt(1) - 48;
                         if ((hs >= 0) & (hs <= 9) & (ws >= 0) & (ws <= 9))    // якщо хоч одна координата буде за межами поля гри
-                            if (mb[hs][ws] == '~') {
-                                mb[hs][ws] = '*';
+                            if (mb[hs][ws] == w) {
+                                mb[hs][ws] = m;
                                 Druk(true);
-                                System.out.println("                                                    "+s);
+                                System.out.println("                                                    "+ coord);
                                 mymove = false;
-                            } else if (mb[hs][ws] == 'O') {
-                                mb[hs][ws] = 'x';
+                            } else if (mb[hs][ws] == s) {
+                                mb[hs][ws] = h;
                                 checkComputersShipwreck();
                                 Druk(true);
-                                System.out.println("                                                    "+s);
+                                System.out.println("                                                    "+ coord);
                                 if (kb <= 0) {
                                     System.out.println("GAME OVER. HUMAN WIN!!!");
                                     return;
@@ -280,43 +273,43 @@ public class SeaBattle {
                 do {
                     hs=(int)(Math.random()*10);
                     ws=(int)(Math.random()*10);
-                    if (mh[hs][ws]=='~'){
-                        mh[hs][ws]='*';
+                    if (mh[hs][ws]==w){
+                        mh[hs][ws]=m;
                         mymove= true;
                         return;
                     }
                     else
-                        if (mh[hs][ws]=='O'){
-                            mh[hs][ws]='x';
+                        if (mh[hs][ws]==s){
+                            mh[hs][ws]=h;
                             if (hs-1>=0)
-                                if (mh[hs-1][ws]=='~') {
+                                if (mh[hs-1][ws]==w) {
                                     dir[0] = true;
                                 }
-                                else if (mh[hs-1][ws]=='O'){
+                                else if (mh[hs-1][ws]==s){
                                         dir[0]=true;
                                         isship++;
                                     }
                             if (hs+1<=9)
-                                if (mh[hs+1][ws]=='~') {
+                                if (mh[hs+1][ws]==w) {
                                     dir[1] = true;
                                 }
-                                else if (mh[hs+1][ws]=='O'){
+                                else if (mh[hs+1][ws]==s){
                                     dir[1]=true;
                                     isship++;
                                     }
                             if (ws-1>=0)
-                                if (mh[hs][ws-1]=='~'){
+                                if (mh[hs][ws-1]==w){
                                     dir[2]=true;
                                 }
-                                else if (mh[hs][ws-1]=='O'){
+                                else if (mh[hs][ws-1]==s){
                                     dir[2]=true;
                                     isship++;
                                     }
                             if (ws+1<=9)
-                                if (mh[hs][ws+1]=='~') {
+                                if (mh[hs][ws+1]==w) {
                                     dir[3] = true;
                                 }
-                                else if (mh[hs][ws+1]=='O'){
+                                else if (mh[hs][ws+1]==s){
                                     dir[3]=true;
                                     isship++;
                                 }
@@ -341,18 +334,18 @@ public class SeaBattle {
                     case 0:
                         hs=hfd-1;
                         ws=wfd;
-                        if (mh[hs][ws]=='~'){
-                            mh[hs][ws]='*';
+                        if (mh[hs][ws]==w){
+                            mh[hs][ws]=m;
                             mymove=true;
                             dir[0]=false;
                         }
                         else{
-                            mh[hs][ws]='x';
+                            mh[hs][ws]=h;
                             hfd=hs;
                             if(hs-1>=0) {
-                                if (mh[hs-1][ws]!='O'){
+                                if (mh[hs-1][ws]!=s){
                                     isship--;
-                                    if (mh[hs-1][ws]!='~')
+                                    if (mh[hs-1][ws]!=w)
                                         dir[0]=false;
                                 }
                             }
@@ -377,18 +370,18 @@ public class SeaBattle {
                     case 1:
                         hs=hed+1;
                         ws=wed;
-                        if (mh[hs][ws]=='~'){
-                            mh[hs][ws]='*';
+                        if (mh[hs][ws]==w){
+                            mh[hs][ws]=m;
                             mymove=true;
                             dir[1]=false;
                         }
                         else{
-                            mh[hs][ws]='x';
+                            mh[hs][ws]=h;
                             hed=hs;
                             if(hs+1<=9) {
-                                if (mh[hs+1][ws]!='O'){
+                                if (mh[hs+1][ws]!=s){
                                     isship--;
-                                    if (mh[hs+1][ws]!='~')
+                                    if (mh[hs+1][ws]!=w)
                                         dir[1]=false;
                                 }
                             }
@@ -413,18 +406,18 @@ public class SeaBattle {
                     case 2:
                         hs=hfd;
                         ws=wfd-1;
-                        if (mh[hs][ws]=='~'){
-                            mh[hs][ws]='*';
+                        if (mh[hs][ws]==w){
+                            mh[hs][ws]=m;
                             mymove=true;
                             dir[2]=false;
                         }
                         else{
-                            mh[hs][ws]='x';
+                            mh[hs][ws]=h;
                             wfd=ws;
                             if(ws-1>=0) {
-                                if (mh[hs][ws-1]!='O'){
+                                if (mh[hs][ws-1]!=s){
                                     isship--;
-                                    if (mh[hs][ws-1]!='~')
+                                    if (mh[hs][ws-1]!=w)
                                         dir[2]=false;
                                 }
                             }
@@ -449,18 +442,18 @@ public class SeaBattle {
                     case 3:
                         hs=hfd;
                         ws=wed+1;
-                        if (mh[hs][ws]=='~'){
-                            mh[hs][ws]='*';
+                        if (mh[hs][ws]==w){
+                            mh[hs][ws]=m;
                             mymove=true;
                             dir[3]=false;
                         }
                         else{
-                            mh[hs][ws]='x';
+                            mh[hs][ws]=h;
                             wed=ws;
                             if(ws+1<=9) {
-                                if (mh[hs][ws+1]!='O'){
+                                if (mh[hs][ws+1]!=s){
                                     isship--;
-                                    if (mh[hs][ws+1]!='~')
+                                    if (mh[hs][ws+1]!=w)
                                         dir[3]=false;
                                 }
                             }
@@ -490,18 +483,18 @@ public class SeaBattle {
                     case 0:
                         hs=hfd-1;
                         ws=wfd;
-                        if (mh[hs][ws]=='~'){
-                            mh[hs][ws]='*';
+                        if (mh[hs][ws]==w){
+                            mh[hs][ws]=m;
                             mymove=true;
                             dir[0]=false;
                         }
                         else{
-                            mh[hs][ws]='x';
+                            mh[hs][ws]=h;
                             hfd=hs;
                             if(hs-1>=0) {
-                                if (mh[hs-1][ws]!='O'){
+                                if (mh[hs-1][ws]!=s){
                                     isship--;
-                                    if (mh[hs-1][ws]!='~')
+                                    if (mh[hs-1][ws]!=w)
                                         dir[0]=false;
                                 }
                             }
@@ -526,18 +519,18 @@ public class SeaBattle {
                     case 1:
                         hs=hed+1;
                         ws=wed;
-                        if (mh[hs][ws]=='~'){
-                            mh[hs][ws]='*';
+                        if (mh[hs][ws]==w){
+                            mh[hs][ws]=m;
                             mymove=true;
                             dir[1]=false;
                         }
                         else{
-                            mh[hs][ws]='x';
+                            mh[hs][ws]=h;
                             hed=hs;
                             if(hs+1<=9) {
-                                if (mh[hs+1][ws]!='O'){
+                                if (mh[hs+1][ws]!=s){
                                     isship--;
-                                    if (mh[hs+1][ws]!='~')
+                                    if (mh[hs+1][ws]!=w)
                                         dir[1]=false;
                                 }
                             }
@@ -562,18 +555,18 @@ public class SeaBattle {
                     case 2:
                         hs=hfd;
                         ws=wfd-1;
-                        if (mh[hs][ws]=='~'){
-                            mh[hs][ws]='*';
+                        if (mh[hs][ws]==w){
+                            mh[hs][ws]=m;
                             mymove=true;
                             dir[2]=false;
                         }
                         else{
-                            mh[hs][ws]='x';
+                            mh[hs][ws]=h;
                             wfd=ws;
                             if(ws-1>=0) {
-                                if (mh[hs][ws-1]!='O'){
+                                if (mh[hs][ws-1]!=s){
                                     isship--;
-                                    if (mh[hs][ws-1]!='~')
+                                    if (mh[hs][ws-1]!=w)
                                         dir[2]=false;
                                 }
                             }
@@ -598,18 +591,18 @@ public class SeaBattle {
                     case 3:
                         hs=hfd;
                         ws=wed+1;
-                        if (mh[hs][ws]=='~'){
-                            mh[hs][ws]='*';
+                        if (mh[hs][ws]==w){
+                            mh[hs][ws]=m;
                             mymove=true;
                             dir[3]=false;
                         }
                         else{
-                            mh[hs][ws]='x';
+                            mh[hs][ws]=h;
                             wed=ws;
                             if(ws+1<=9) {
-                                if (mh[hs][ws+1]!='O'){
+                                if (mh[hs][ws+1]!=s){
                                     isship--;
-                                    if (mh[hs][ws+1]!='~')
+                                    if (mh[hs][ws+1]!=w)
                                         dir[3]=false;
                                 }
                             }
@@ -673,20 +666,20 @@ public class SeaBattle {
         int j=ws;
         int i=hs-1;
         while (i>=0)
-            if (mb[i][j]=='O')
+            if (mb[i][j]==s)
                 return;
             else
-                if (mb[i][j]=='x')
+                if (mb[i][j]==h)
                     i--;
                 else
                     break;
         hf=i+1;
         i=hs+1;
         while (i<=9)
-            if (mb[i][j]=='O')
+            if (mb[i][j]==s)
                 return;
             else
-                if (mb[i][j]=='x')
+                if (mb[i][j]==h)
                     i++;
                 else
                     break;
@@ -695,20 +688,20 @@ public class SeaBattle {
             i=hs;
             j=ws-1;
             while (j>=0)
-                if (mb[i][j]=='O')
+                if (mb[i][j]==s)
                     return;
                 else
-                if (mb[i][j]=='x')
+                if (mb[i][j]==h)
                     j--;
                 else
                     break;
             wf=j+1;
             j=ws+1;
             while (j<=9)
-                if (mb[i][j]=='O')
+                if (mb[i][j]==s)
                     return;
                 else
-                if (mb[i][j]=='x')
+                if (mb[i][j]==h)
                     j++;
                 else
                     break;
@@ -734,9 +727,9 @@ public class SeaBattle {
                         System.out.print(" " + mh[i][j] + " ");    // друкуємо поточний елемент з пропуском до нього і після
                     System.out.print("     "+(char)(i+97)+" ");
                     for (int j = 0; j < 10; j++)    // проходимо по всіх елементах поточного рядка
-                        //if (mb[i][j]=='O')
-                        //    System.out.print(" ~ ");
-                        //else
+                        if (mb[i][j]==s)
+                            System.out.print(" "+w+" ");
+                        else
                         if (j==ws)
                             System.out.print(">"+mb[i][j]+"<");    // друкуємо поточний елемент з пропуском до нього і після
                         else
@@ -747,9 +740,9 @@ public class SeaBattle {
                         System.out.print(" " + mh[i][j] + " ");    // друкуємо поточний елемент з пропуском до нього і після
                     System.out.print("     " + (char) (i + 97) + " ");
                     for (int j = 0; j < 10; j++)    // проходимо по всіх елементах поточного рядка
-                        //if (mb[i][j] == 'O')
-                          //  System.out.print(" ~ ");
-                        //else
+                        if (mb[i][j] == s)
+                            System.out.print(" "+w+" ");
+                        else
                             System.out.print(" " + mb[i][j] + " ");    // друкуємо поточний елемент з пропуском до нього і після
                 }
                 System.out.println();   // після друкування всіх елементів поточного рядка переводими друк на новий рядок
@@ -766,9 +759,9 @@ public class SeaBattle {
                             System.out.print(" " + mh[i][j] + " ");    // друкуємо поточний елемент з пропуском до нього і після
                     System.out.print("     "+(char)(i+97)+" ");
                     for (int j = 0; j < 10; j++)    // проходимо по всіх елементах поточного рядка
-                        //if (mb[i][j]=='O')
-                        //    System.out.print(" ~ ");
-                        //else
+                        if (mb[i][j]==s)
+                            System.out.print(" "+w+" ");
+                        else
                             System.out.print(" "+mb[i][j]+" ");    // друкуємо поточний елемент з пропуском до нього і після
                 }
                 else {
@@ -776,9 +769,9 @@ public class SeaBattle {
                         System.out.print(" " + mh[i][j] + " ");    // друкуємо поточний елемент з пропуском до нього і після
                     System.out.print("     " + (char) (i + 97) + " ");
                     for (int j = 0; j < 10; j++)    // проходимо по всіх елементах поточного рядка
-                        //if (mb[i][j] == 'O')
-                        //    System.out.print(" ~ ");
-                        //else
+                        if (mb[i][j] == s)
+                            System.out.print(" "+w+" ");
+                        else
                             System.out.print(" " + mb[i][j] + " ");    // друкуємо поточний елемент з пропуском до нього і після
                 }
                 System.out.println();   // після друкування всіх елементів поточного рядка переводими друк на новий рядок
@@ -794,9 +787,9 @@ public class SeaBattle {
                 System.out.print(" "+mh[i][j]+" ");    // друкуємо поточний елемент з пропуском до нього і після
             System.out.print("     "+(char)(i+97)+" ");
             for (int j = 0; j < 10; j++)    // проходимо по всіх елементах поточного рядка
-                //if (mb[i][j]=='O')
-                //    System.out.print(" ~ ");
-                //else
+                if (mb[i][j]==s)
+                    System.out.print(" "+w+" ");
+                else
                     System.out.print(" "+mb[i][j]+" ");    // друкуємо поточний елемент з пропуском до нього і після
             System.out.println();   // після друкування всіх елементів поточного рядка переводими друк на новий рядок
         }
@@ -805,16 +798,16 @@ public class SeaBattle {
     static void removeControlArea(char[][]m){
         for (int i=0;i<10;i++)
             for (int j=0;j<10;j++)
-                if (m[i][j]=='!')
-                    m[i][j]='~';
+                if (m[i][j]==c)
+                    m[i][j]=w;
     }
 //############################### Метод що друку поле гри людини #################################################################################################
     static void setControlArea(char[][]m){
         for (int i=hf-1;i<=he+1;i++)
             for (int j=wf-1;j<=we+1;j++)
                 try {
-                    if (m[i][j]=='~')
-                        m[i][j]='!';
+                    if (m[i][j]==w)
+                        m[i][j]=c;
                 }
                 catch (ArrayIndexOutOfBoundsException ignored){
                 }
