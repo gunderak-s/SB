@@ -1,8 +1,12 @@
 package com.company;
 
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
 
-public class SeaBattle {
+public class SeaBattle extends JFrame {
     // оголошення полів гри для людини(m-масив, l-людина) та комп'ютера(m-масив, c-computer) - двовимірних масивів символів розміру 10 на 10, оголошення як значень класу щоб методи мали до них доступ
     static char [][] mh;
     static char [][] mb;
@@ -14,22 +18,78 @@ public class SeaBattle {
     static boolean mymove;
     static boolean[] dir={false,false,false,false};
     static int isship=0;
-    static char w='.';
-    static char s='O';
-    static char c='*';
-    static char m='*';
+    static char w=' ';
+    static char s='#';
+    static char c='.';
+    static char m='.';
     static char h='x';
+    JButton[][] ml;
+    JButton random;
+    JButton start;
+    JPanel sbPanel;
+    public SeaBattle(){
+        setSize(1000,800);
+        setTitle("Морський бій");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        sbPanel = new JPanel();
+        //pPanel.setSize(DEFAULT_WIDTH, DEFAULT_WIDTH);
+        //LayoutManager mng =new GridLayout(4,4,3,3);
+        sbPanel.setLayout(null);
+        add(sbPanel);
+        random=new JButton("Згенерувати");
+        random.setSize(200,50);
+        random.setLocation(10,550);
+        random.setVisible(true);
+        random.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent event) {
+                for (int i = 0; i < 10; i++) {
+                        ml[0][i].removeNotify();
+                    }
+            }
+        });
+        sbPanel.add(random);
+        makeButton();
+    }
     // коли поле малюватиметься на консолі, нульовий рядок буде першим, 9-останнім, 0 стовпчик - крайній зліва, 9 стовпчик - крайній справа,
     // тому координата ширини зростатиме зліва направо, а координата висоти зростатиме згори вниз
     public static void main(String[] args) {
 //########################### Основна частина. Тут мають бути виклики методів що і робитимуть основну роботу ##########################################################################
-        setSee();
+        SeaBattle SB=new SeaBattle();
+        SB.setVisible(true);
+        //setSee();
         //setShipHuman(); // виклик метода що малює всі кораблі по введених гравцем координатах
-        setShipComputer(mh);
-        setShipComputer(mb);
-        Game();
+        //setShipComputer(mh);
+        //setShipComputer(mb);
+        //Game();
         //Druk(); // виклик метода що друкує поле гри людини
         //test();
+    }
+    private void makeButton() {
+        ml=new JButton[10][10];
+        for (int i = 0; i < 10; i++)
+            for (int j = 0; j < 10; j++) {
+                ml[i][j]=new JButton();
+                ml[i][j].setSize(50,50);
+                ml[i][j].setLocation(10+j*50,10+i*50);
+                ml[i][j].setVisible(true);
+                ml[i][j].addActionListener(new ActionListener()
+                                         {
+                                             public void actionPerformed(ActionEvent event) {
+                                                 for (int i = 0; i < 10; i++)
+                                                     for (int j = 0; j < 10; j++)
+                                                         if (event.getSource()==ml[i][j]){
+                                                             ml[i][j].setText("1");
+                                                             return;
+                                                        }
+                                                 //JButton b =(JButton) event.getSource();
+                                                 //b.setText("X");
+                                                 //b.setBackground(Color.BLACK);
+
+                                             }
+                                         });
+                sbPanel.add(ml[i][j]);
+            }
     }
 //################################ Метод, що малює всі кораблі з можливим накладанням і дотиком #######################################################################################################################
     static void setSee(){
